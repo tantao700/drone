@@ -82,6 +82,7 @@ type (
 		// Remote configurations
 		Bitbucket Bitbucket
 		Gitea     Gitea
+		Gitee     Gitee
 		Github    Github
 		GitLab    GitLab
 		Gogs      Gogs
@@ -410,6 +411,18 @@ type (
 		StorageAccessKey   string `envconfig:"DRONE_AZURE_STORAGE_ACCESS_KEY"`
 	}
 
+	// Gitee provides the gitee client configuration.
+	Gitee struct {
+		Server       string   `envconfig:"DRONE_GITEE_SERVER" default:"https://gitee.com"`
+		APIServer    string   `envconfig:"DRONE_GITEE_API_SERVER"`
+		ClientID     string   `envconfig:"DRONE_GITEE_CLIENT_ID"`
+		ClientSecret string   `envconfig:"DRONE_GITEE_CLIENT_SECRET"`
+		SkipVerify   bool     `envconfig:"DRONE_GITEE_SKIP_VERIFY"`
+		Scope        []string `envconfig:"DRONE_GITEE_SCOPE" default:"repo,repo:status,user:email,read:org"`
+		RateLimit    int      `envconfig:"DRONE_GITEE_USER_RATELIMIT"`
+		Debug        bool     `envconfig:"DRONE_GITEE_DEBUG"`
+	}
+
 	// HTTP provides http configuration.
 	HTTP struct {
 		AllowedHosts          []string          `envconfig:"DRONE_HTTP_ALLOWED_HOSTS"`
@@ -480,6 +493,12 @@ func (c *Config) IsGogs() bool {
 // is activated.
 func (c *Config) IsGitea() bool {
 	return c.Gitea.Server != ""
+}
+
+// IsGitee returns true if the Gitea integration
+// is activated.
+func (c *Config) IsGitee() bool {
+	return c.Gitee.Server != ""
 }
 
 // IsBitbucket returns true if the Bitbucket Cloud

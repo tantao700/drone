@@ -55,6 +55,8 @@ func provideClient(config config.Config) *scm.Client {
 		return provideGithubClient(config)
 	case config.Gitea.Server != "":
 		return provideGiteaClient(config)
+	case config.Gitee.Server != "":
+		return provideGiteeClient(config)
 	case config.GitLab.ClientID != "":
 		return provideGitlabClient(config)
 	case config.Gogs.Server != "":
@@ -128,6 +130,33 @@ func provideGiteaClient(config config.Config) *scm.Client {
 				Source:       oauth2.ContextTokenSource(),
 			},
 			Base: defaultTransport(config.Gitea.SkipVerify),
+		},
+	}
+	return client
+}
+
+// provideGiteeClient is a Wire provider function that returns
+// a Gitee client based on the environment configuration.
+func provideGiteeClient(config config.Config) *scm.Client {
+	//TODO need driver repo
+	client, err := gitea.New(config.Gitee.Server)
+	if err != nil {
+		logrus.WithError(err).
+			Fatalln("main: cannot create the Gitee client")
+	}
+	if config.Gitee.Debug {
+		client.DumpResponse = httputil.DumpResponse
+	}
+	client.Client = &http.Client{
+		Transport: &oauth2.Transport{
+			Scheme: oauth2.SchemeBearer,
+			Source: &oauth2.Refresher{
+				ClientID:     config.Gitee.ClientID,
+				ClientSecret: config.Gitee.ClientSecret,
+				Endpoint:     strings.TrimSuffix(config.Gitee.Server, "/") + "/login/oauth/access_token",
+				Source:       oauth2.ContextTokenSource(),
+			},
+			Base: defaultTransport(config.Gitee.SkipVerify),
 		},
 	}
 	return client

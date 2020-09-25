@@ -11,8 +11,8 @@ steps:
 - name: test
   image: golang:1.14.4
   commands:
-  - go test ./...
-  
+  - go test -v ./...
+
 - name: build
   image: golang:1.14.4
   commands:
@@ -27,7 +27,8 @@ steps:
     auto_tag: true
     auto_tag_suffix: linux-amd64
     dockerfile: docker/Dockerfile.server.linux.amd64
-    repo: drone/drone
+    registry: registry.hub.docker.com
+    repo: registry.hub.docker.com/tantao700/drone
     username:
       from_secret: docker_username
     password:
@@ -61,7 +62,8 @@ steps:
     auto_tag: true
     auto_tag_suffix: linux-arm64
     dockerfile: docker/Dockerfile.server.linux.arm64
-    repo: drone/drone
+    registry: registry.hub.docker.com
+    repo: registry.hub.docker.com/tantao700/drone
     username:
       from_secret: docker_username
     password:
@@ -99,7 +101,8 @@ steps:
     auto_tag: true
     auto_tag_suffix: linux-arm
     dockerfile: docker/Dockerfile.server.linux.arm
-    repo: drone/drone
+    registry: registry.hub.docker.com
+    repo: registry.hub.docker.com/tantao700/drone
     username:
       from_secret: docker_username
     password:

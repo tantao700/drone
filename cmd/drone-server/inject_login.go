@@ -15,6 +15,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/drone/drone/cmd/drone-server/config"
 	"github.com/drone/go-login/login"
 	"github.com/drone/go-login/login/bitbucket"
@@ -24,7 +26,6 @@ import (
 	"github.com/drone/go-login/login/gogs"
 	"github.com/drone/go-login/login/stash"
 	"github.com/drone/go-scm/scm/transport/oauth2"
-	"strings"
 
 	"github.com/google/wire"
 	"github.com/sirupsen/logrus"
@@ -46,6 +47,8 @@ func provideLogin(config config.Config) login.Middleware {
 		return provideGithubLogin(config)
 	case config.Gitea.Server != "":
 		return provideGiteaLogin(config)
+	case config.Gitee.Server != "":
+		return provideGiteeLogin(config)
 	case config.GitLab.ClientID != "":
 		return provideGitlabLogin(config)
 	case config.Gogs.Server != "":
@@ -93,7 +96,7 @@ func provideGiteaLogin(config config.Config) login.Middleware {
 	if config.Gitea.Server == "" {
 		return nil
 	}
-	return &gitea.Config {
+	return &gitea.Config{
 		ClientID:     config.Gitea.ClientID,
 		ClientSecret: config.Gitea.ClientSecret,
 		Server:       config.Gitea.Server,
@@ -176,4 +179,20 @@ func provideRefresher(config config.Config) *oauth2.Refresher {
 		}
 	}
 	return nil
+}
+
+// provideGithubLogin is a Wire provider function that returns
+// a GitHub authenticator based on the environment configuration.
+func provideGiteeLogin(config config.Config) login.Middleware {
+	if config.Github.ClientID == "" {
+		return nil
+	}
+	return &github.Config{
+		ClientID:     config.Gitee.ClientID,
+		ClientSecret: config.Gitee.ClientSecret,
+		Scope:        config.Gitee.Scope,
+		Server:       config.Gitee.Server,
+		Client:       defaultClient(config.Gitee.SkipVerify),
+		Logger:       logrus.StandardLogger(),
+	}
 }
