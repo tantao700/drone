@@ -21,6 +21,7 @@ import (
 	"github.com/drone/go-login/login"
 	"github.com/drone/go-login/login/bitbucket"
 	"github.com/drone/go-login/login/gitea"
+	"github.com/drone/go-login/login/gitee"
 	"github.com/drone/go-login/login/github"
 	"github.com/drone/go-login/login/gitlab"
 	"github.com/drone/go-login/login/gogs"
@@ -184,15 +185,14 @@ func provideRefresher(config config.Config) *oauth2.Refresher {
 // provideGithubLogin is a Wire provider function that returns
 // a GitHub authenticator based on the environment configuration.
 func provideGiteeLogin(config config.Config) login.Middleware {
-	if config.Github.ClientID == "" {
+	if config.Gitee.ClientID == "" {
 		return nil
 	}
-	return &github.Config{
+	return &gitee.Config{
 		ClientID:     config.Gitee.ClientID,
 		ClientSecret: config.Gitee.ClientSecret,
 		Scope:        config.Gitee.Scope,
 		Server:       config.Gitee.Server,
 		Client:       defaultClient(config.Gitee.SkipVerify),
-		Logger:       logrus.StandardLogger(),
 	}
 }

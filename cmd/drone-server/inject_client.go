@@ -28,6 +28,7 @@ import (
 	"github.com/drone/go-scm/scm"
 	"github.com/drone/go-scm/scm/driver/bitbucket"
 	"github.com/drone/go-scm/scm/driver/gitea"
+	"github.com/drone/go-scm/scm/driver/gitee"
 	"github.com/drone/go-scm/scm/driver/github"
 	"github.com/drone/go-scm/scm/driver/gitlab"
 	"github.com/drone/go-scm/scm/driver/gogs"
@@ -139,7 +140,7 @@ func provideGiteaClient(config config.Config) *scm.Client {
 // a Gitee client based on the environment configuration.
 func provideGiteeClient(config config.Config) *scm.Client {
 	//TODO need driver repo
-	client, err := gitea.New(config.Gitee.Server)
+	client, err := gitee.New(config.Gitee.Server)
 	if err != nil {
 		logrus.WithError(err).
 			Fatalln("main: cannot create the Gitee client")
@@ -153,7 +154,7 @@ func provideGiteeClient(config config.Config) *scm.Client {
 			Source: &oauth2.Refresher{
 				ClientID:     config.Gitee.ClientID,
 				ClientSecret: config.Gitee.ClientSecret,
-				Endpoint:     strings.TrimSuffix(config.Gitee.Server, "/") + "/login/oauth/access_token",
+				Endpoint:     strings.TrimSuffix(config.Gitee.Server, "/") + "/oauth/access_token",
 				Source:       oauth2.ContextTokenSource(),
 			},
 			Base: defaultTransport(config.Gitee.SkipVerify),

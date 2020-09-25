@@ -412,13 +412,14 @@ type (
 	}
 
 	// Gitee provides the gitee client configuration.
+	// https://gitee.com/api/v5/oauth_doc#/list-item-1
 	Gitee struct {
 		Server       string   `envconfig:"DRONE_GITEE_SERVER" default:"https://gitee.com"`
 		APIServer    string   `envconfig:"DRONE_GITEE_API_SERVER"`
 		ClientID     string   `envconfig:"DRONE_GITEE_CLIENT_ID"`
 		ClientSecret string   `envconfig:"DRONE_GITEE_CLIENT_SECRET"`
 		SkipVerify   bool     `envconfig:"DRONE_GITEE_SKIP_VERIFY"`
-		Scope        []string `envconfig:"DRONE_GITEE_SCOPE" default:"repo,repo:status,user:email,read:org"`
+		Scope        []string `envconfig:"DRONE_GITEE_SCOPE" default:"user_info projects groups"`
 		RateLimit    int      `envconfig:"DRONE_GITEE_USER_RATELIMIT"`
 		Debug        bool     `envconfig:"DRONE_GITEE_DEBUG"`
 	}
