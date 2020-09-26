@@ -193,6 +193,7 @@ func provideGiteeLogin(config config.Config) login.Middleware {
 		ClientSecret: config.Gitee.ClientSecret,
 		Scope:        config.Gitee.Scope,
 		Server:       config.Gitee.Server,
+		RedirectURL:  config.Server.Addr + "/login",
 		Client:       defaultClient(config.Gitee.SkipVerify),
 	}
 }
