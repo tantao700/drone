@@ -73,7 +73,7 @@ require (
 
 replace github.com/h2non/gock => gopkg.in/h2non/gock.v1 v1.0.14
 
-replace github.com/drone/go-scm => github.com/tantao700/go-scm 1b40911583001e6e058895bc4e8dcdc4776155d6
+replace github.com/drone/go-scm => github.com/tantao700/go-scm v1.7.2-0.20200926142620-1b4091158300
 
 replace github.com/drone/go-login => github.com/tantao700/go-login v1.0.4-0.20190523173805-3a1fffcbc202
 
